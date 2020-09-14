@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang='en' dir='ltr'>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+    <style type="text/css">
+        *,
+        *::before,
+        *::after{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html{
+            font-size: 62.5%;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .main_div{
+            width: 100vw;
+            height: 100vh;
+            background-color: #f6f6f6;
+            display: grid;
+            place-items: center;
+        }
+
+        .music_container{
+            width: 35rem;
+            height: 58rem;
+            background-color: #fff;
+            border-radius: 2rem;
+            box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, .2);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .music_container #title_div{
+            height: 120px;
+            position: relative;
+            margin-bottom: .5rem;
+        }
+
+        .music_container #title{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: .2rem;
+            word-spacing: 0.5rem;
+            color: #171717;
+            margin: 2rem 0 0 .5rem 0;
+            font-size: 2.5rem;
+            font-weight: 500;
+            text-shadow: 0 .3rem .5rem rgba(0, 0, 0, .3);
+        }
+
+        .music_container #artist{
+            color: #cccaca;
+            text-transform: capitalize;
+            letter-spacing: 0.1rem;
+            font-size: 2rem;
+            margin-bottom: 4rem;
+            font-weight: 300;   
+        }
+
+        .img_container{
+            width: 25rem;
+            height: 25rem;
+            margin: auto;
+        }
+
+        img{
+            /* make the image object fit and circle */
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.4);
+        }
+
+        .music_controls{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .music_controls .fas{
+            color: #111111;
+            font-size: 2rem;
+            cursor: pointer;
+            filter: drop-shadow(0 1.2rem 3rem .5rem rgba(0, 0, 0, 0.4));
+        }
+
+        .music_controls .fas.main_button{
+            width: 5rem;
+            height: 5rem;
+            background-color: #111;
+            border-radius: 50%;
+            color: #f6f6f6;
+            font-size: 1.4rem;
+            display: grid;
+            place-items: center;
+        }
+
+        .music_controls .fas:hover{
+            color: gray;
+        }
+
+        .music_controls .fa-play:hover{
+            background-color: #f6f6f6;
+            color: #111;
+            box-shadow: 0 1rem 2rem .2rem rgba(0, 0, 0, 0.4);
+        }
+
+        /* add anime class to animate */
+        .anime{
+            animation: rotatePlayer 3s linear infinite;
+        }
+
+        @keyframes rotatePlayer{
+            0%{
+                transform: rotate(0deg);
+            }
+            100%{
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bufferPlayer{
+            0%{
+                transform: scale(1);
+            }
+            95%{
+                transform: scale(1);      
+            }
+            100%{
+                transform: scale(1.1);
+            }
+        }
+
+         @media screen and (max-width: 468px){
+            .music_container{
+                width: 90vw;
+                height: 54rem;
+                overflow: hidden;    
+            }
+
+            .music_container #title{
+                font-size: 2rem;
+            }
+
+            .music_container #artist{
+                font-size: 1.5rem;
+            }
+
+            .img_container{
+                width: 70vw;
+                height: 70vw;
+            }
+
+        } 
+    </style>
+    <title>Music Player - SRK</title>
+</head>
+<body>
+    <div class="main_div">
+        <div class="music_container">
+            <div id="title_div">
+                <h2 id="title">Ab hai neend kise, ab hai chain kahan</h2>
+            </div>
+            <h3 id="artist">Kumar Sanu, Alka Yagnik</h3>
+            <div class="img_container">
+                <img src="images/image-1.jpg" alt="Ab Hain Neend Kise, Ab Hai Chain Kahan"/>
+            </div>
+            <audio src="songs/audio-1.mp3" alt="Ab Hai Neend Kise, Ab Hai Chain Kahan"></audio>
+            
+            <!-- Controls -->
+            <div class="music_controls">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play main_button" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const music = document.querySelector('audio');
+        const img = document.querySelector('img'); 
+        const title = document.getElementById('title');
+        const artist = document.getElementById('artist');
+        const prev = document.getElementById('prev');
+        const play = document.getElementById('play');
+        const next = document.getElementById('next');
+
+        const songs = [
+            {
+                name: 'audio-1',
+                title: 'Ab hai neend kise, ab hai chain kahan',
+                artist: 'Kumar Sanu, Alka Yagnik',
+                image: 'image-1',
+            },
+            {
+                name: 'audio-2',
+                title: 'Kitaben Bahut Si',
+                artist: 'Asha Bhosle, Vinod Rathod',
+                image: 'image-2'
+            },
+            {
+                name: 'audio-3',
+                title: 'Daddy Cool',
+                artist: 'Boney M., Boney NEM',
+                image: 'image-3',
+            },
+        ]
+
+        let isPlaying = false;
+        play.addEventListener('click', () => {
+            if(!isPlaying){    //for play functionality
+                music.play();
+                play.classList.replace('fa-play', 'fa-pause');
+                img.classList.add('anime');
+                isPlaying = true;
+            }else{      //for pause functionality
+                music.pause();
+                play.classList.replace('fa-pause', 'fa-play');
+                img.classList.remove('anime');
+                isPlaying = false;
+            }
+        });
+        
+        //changing the music data
+        const loadSong = (songs) => {
+            title.textContent = songs.title;
+            artist.textContent = songs.artist;
+            music.src = `songs/${songs.name}.mp3`;
+            img.src = `images/${songs.image}.jpg`;
+        };
+
+        songIndex = 0;
+        // loadSong(songs[2]);
+
+        const prevSong = () => {
+            music.pause();
+            play.classList.replace('fa-pause', 'fa-play');
+            img.classList.remove('anime');
+            isPlaying = false;
+             if(songIndex == 0){
+                songIndex = 2;
+                console.log(songIndex);
+                loadSong(songs[songIndex]);
+             }else{
+                 songIndex--;
+                 console.log(songIndex);
+                 loadSong(songs[songIndex]);
+             }
+        }
+
+        const nextSong = () => {
+            music.pause();
+            play.classList.replace('fa-pause', 'fa-play');
+            img.classList.remove('anime');
+            isPlaying = false;
+            if(songIndex == 2){
+                songIndex = 0;
+                console.log(songIndex);
+                loadSong(songs[songIndex]);
+            }else{
+                songIndex++;
+                console.log(songIndex);
+                loadSong(songs[songIndex]);
+            }
+        }
+
+        prev.addEventListener('click', prevSong);
+        next.addEventListener('click', nextSong);
+    </script>
+</body>
+</html>
