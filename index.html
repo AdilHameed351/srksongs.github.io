@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
     <style type="text/css">
         *,
         *::before,
@@ -35,26 +36,19 @@
             box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, .2);
             padding: 3rem;
             text-align: center;
-        }
-
-        .music_container #title_div{
-            height: 120px;
             position: relative;
-            margin-bottom: .5rem;
         }
 
         .music_container #title{
-            position: absolute;
-            bottom: 0;
-            width: 100%;
             text-transform: uppercase;
             letter-spacing: .2rem;
             word-spacing: 0.5rem;
             color: #171717;
-            margin: 2rem 0 0 .5rem 0;
+            margin: 2rem 0 1.5rem 0;
             font-size: 2.5rem;
-            font-weight: 500;
+            font-weight: 900;
             text-shadow: 0 .3rem .5rem rgba(0, 0, 0, .3);
+            font-family: 'Open Sans', sans-serif;
         }
 
         .music_container #artist{
@@ -85,7 +79,7 @@
             display: flex;
             justify-content: space-evenly;
             align-items: center;
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
         .music_controls .fas{
@@ -120,6 +114,7 @@
         .anime{
             animation: rotatePlayer 3s linear infinite;
         }
+
 
         @keyframes rotatePlayer{
             0%{
@@ -161,30 +156,98 @@
                 width: 70vw;
                 height: 70vw;
             }
-
         } 
+
+        /* progress style */
+        .progressbar_container{
+            width: 100%;
+            height: auto;
+            padding: 1rem 0;
+            margin-top: 1rem;
+        }
+
+        .progress_div{
+            width: 100%;
+            height: .5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 
+                        0 2px 4px rgba(0, 0, 0, 0.07),
+                        0 4px 8px rgba(0, 0, 0, 0.07),
+                        0 8px 16px rgba(0, 0, 0, 0.07),
+                        0 16px 32px rgba(0, 0, 0, 0.07),
+                        0 32px 64px rgba(0, 0, 0, 0.07);
+            border-radius: 4rem;
+            position: relative;
+            margin-top: .5rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .progress_duration_meter{
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+        }
+
+        .progress{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        #muted_btn_div{
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 15px;
+            box-shadow: 0 1rem 2rem .2rem rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 50%;
+        }
     </style>
     <title>Music Player - SRK</title>
 </head>
 <body>
     <div class="main_div">
         <div class="music_container">
-            <div id="title_div">
-                <h2 id="title">Ab hai neend kise, ab hai chain kahan</h2>
-            </div>
+            <h2 id="title">Ab hai neend kise</h2>
             <h3 id="artist">Kumar Sanu, Alka Yagnik</h3>
             <div class="img_container">
                 <img src="images/image-1.jpg" alt="Ab Hain Neend Kise, Ab Hai Chain Kahan"/>
             </div>
             <audio src="songs/audio-1.mp3" alt="Ab Hai Neend Kise, Ab Hai Chain Kahan"></audio>
             
+            <!-- progress bar -->
+            <div class="progressbar_container" id="progress_container">
+                <div class="progress_duration_meter">
+                    <div id="current_time">00:00</div>
+                    <div id="duration">07:12</div>
+                </div>
+                <div class="progress_div" id="progress_div">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+
             <!-- Controls -->
             <div class="music_controls">
                 <i class="fas fa-backward" id="prev" title="Previous"></i>
                 <i class="fas fa-play main_button" id="play" title="Play"></i>
                 <i class="fas fa-forward" id="next" title="Next"></i>
             </div>
+            <div id="muted_btn_div">
+                <i class="fas fa-volume-up" id="volume_state"></i>
+            </div>
         </div>
+        
     </div>
 
     <script type="text/javascript">
@@ -195,25 +258,34 @@
         const prev = document.getElementById('prev');
         const play = document.getElementById('play');
         const next = document.getElementById('next');
+        let progress = document.getElementById('progress');
+        let total_duration = document.getElementById('duration');
+        let current_time = document.getElementById('current_time');
+        const progress_div = document.getElementById('progress_div');
+        let btn_div = document.getElementById('muted_btn_div');
+        let volume_state = document.getElementById('volume_state');
 
         const songs = [
             {
                 name: 'audio-1',
-                title: 'Ab hai neend kise, ab hai chain kahan',
+                title: 'Ab hai neend kise',
                 artist: 'Kumar Sanu, Alka Yagnik',
                 image: 'image-1',
+                total_duration: '07:12',
             },
             {
                 name: 'audio-2',
                 title: 'Kitaben Bahut Si',
                 artist: 'Asha Bhosle, Vinod Rathod',
-                image: 'image-2'
+                image: 'image-2',
+                total_duration: '06:01',
             },
             {
                 name: 'audio-3',
                 title: 'Daddy Cool',
                 artist: 'Boney M., Boney NEM',
                 image: 'image-3',
+                total_duration: '04:18',
             },
         ]
 
@@ -223,11 +295,12 @@
                 music.play();
                 play.classList.replace('fa-play', 'fa-pause');
                 img.classList.add('anime');
+                img.style.animationPlayState = 'running';
                 isPlaying = true;
             }else{      //for pause functionality
                 music.pause();
                 play.classList.replace('fa-pause', 'fa-play');
-                img.classList.remove('anime');
+                img.style.animationPlayState = 'paused';
                 isPlaying = false;
             }
         });
@@ -238,8 +311,9 @@
             artist.textContent = songs.artist;
             music.src = `songs/${songs.name}.mp3`;
             img.src = `images/${songs.image}.jpg`;
+            total_duration.textContent = songs.total_duration;
         };
-
+ 
         songIndex = 0;
         // loadSong(songs[2]);
 
@@ -247,14 +321,13 @@
             music.pause();
             play.classList.replace('fa-pause', 'fa-play');
             img.classList.remove('anime');
+            progress.style.width = 0;
             isPlaying = false;
              if(songIndex == 0){
                 songIndex = 2;
-                console.log(songIndex);
                 loadSong(songs[songIndex]);
              }else{
                  songIndex--;
-                 console.log(songIndex);
                  loadSong(songs[songIndex]);
              }
         }
@@ -263,20 +336,69 @@
             music.pause();
             play.classList.replace('fa-pause', 'fa-play');
             img.classList.remove('anime');
-            isPlaying = false;
+            progress.style.width = 0;
+            isPlaying = false;                   
             if(songIndex == 2){
                 songIndex = 0;
-                console.log(songIndex);
                 loadSong(songs[songIndex]);
             }else{
                 songIndex++;
-                console.log(songIndex);
                 loadSong(songs[songIndex]);
             }
         }
 
+        // progress js work
+
+        music.addEventListener('timeupdate', (event) => {
+            const { currentTime, duration } = event.srcElement; 
+
+            let progress_time = (currentTime / duration) * 100;
+            progress.style.width = `${progress_time}%`;
+
+            // music current duration update
+            let min_current_duration = Math.floor(currentTime / 60);
+            let sec_current_duration = Math.floor(currentTime % 60);
+
+            if(min_current_duration < 10 && sec_current_duration < 10){
+                current_time.textContent = `0${min_current_duration}:0${sec_current_duration}`;
+            }
+            else if(min_current_duration < 10){
+                current_time.textContent = `0${min_current_duration}:${sec_current_duration}`;
+            }else if(sec_current_duration < 10){
+                current_time.textContent = `${min_current_duration}:0${sec_current_duration}`;
+            }else{
+                current_time.textContent = `${min_current_duration}:${sec_current_duration}`;
+            } 
+        });
+
+        // progress onclick functionality
+        progress_div.addEventListener('click', (evnet) => {
+            const { duration } = music;     //(Same As) ---> const duration = music.duration
+            let move_progress = (event.offsetX / event.srcElement.clientWidth) * duration;
+            console.log(move_progress);
+            music.currentTime = move_progress;
+        });
+
+        //if song end call nextSong function
+        music.addEventListener('ended', nextSong);
+
         prev.addEventListener('click', prevSong);
         next.addEventListener('click', nextSong);
+
+        let mutedMusic = false;
+        //muted & un-muted button
+        btn_div.addEventListener('click', () =>{
+            if(!mutedMusic){
+                volume_state.classList.replace('fa-volume-up', 'fa-volume-mute');
+                music.muted = true;
+                mutedMusic = true;
+
+            }else{
+                volume_state.classList.replace('fa-volume-mute', 'fa-volume-up');
+                music.muted = false;
+                mutedMusic = false;
+            }
+        });
     </script>
 </body>
-</html>
+</html> 
