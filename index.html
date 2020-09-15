@@ -35,6 +35,7 @@
             border-radius: 2rem;
             box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, .2);
             padding: 3rem;
+            padding-top: 2rem;
             text-align: center;
             position: relative;
         }
@@ -49,6 +50,10 @@
             font-weight: 900;
             text-shadow: 0 .3rem .5rem rgba(0, 0, 0, .3);
             font-family: 'Open Sans', sans-serif;
+        }
+
+        #music_count{
+            opacity: 0.6;
         }
 
         .music_container #artist{
@@ -219,6 +224,7 @@
 <body>
     <div class="main_div">
         <div class="music_container">
+            <h4 id="music_count">1 / 3</h4>
             <h2 id="title">Ab hai neend kise</h2>
             <h3 id="artist">Kumar Sanu, Alka Yagnik</h3>
             <div class="img_container">
@@ -264,6 +270,7 @@
         const progress_div = document.getElementById('progress_div');
         let btn_div = document.getElementById('muted_btn_div');
         let volume_state = document.getElementById('volume_state');
+        let music_count = document.getElementById('music_count');
 
         const songs = [
             {
@@ -272,6 +279,7 @@
                 artist: 'Kumar Sanu, Alka Yagnik',
                 image: 'image-1',
                 total_duration: '07:12',
+                music_count: '1 / 10',
             },
             {
                 name: 'audio-2',
@@ -279,13 +287,71 @@
                 artist: 'Asha Bhosle, Vinod Rathod',
                 image: 'image-2',
                 total_duration: '06:01',
+                music_count: '2 / 10',
             },
             {
                 name: 'audio-3',
                 title: 'Daddy Cool',
-                artist: 'Boney M., Boney NEM',
+                artist: 'Devang Patel, Sudesh Bhosale',
                 image: 'image-3',
                 total_duration: '04:18',
+                music_count: '3 / 10',
+            },
+            {
+                name: 'audio-4',
+                title: 'Tujhe Dekha Toh',
+                artist: 'Kumar Sanu, Lata Mangeshkar',
+                image: 'image-4',
+                total_duration: '05:13',
+                music_count: '4 / 10',
+            },
+            {
+                name: 'audio-5',
+                title: 'Mere Mehboob',
+                artist: 'Udit Narayan, Alka Yagnik',
+                image: 'image-5',
+                total_duration: '05:24',
+                music_count: '5 / 10',
+            },
+            {
+                name: 'audio-6',
+                title: 'Kuch Kuch Hota',
+                artist: 'Udit Narayan, Alka Yagnik',
+                image: 'image-6',
+                total_duration: '04:53',
+                music_count: '6 / 10',
+            },
+            {
+                name: 'audio-7',
+                title: 'Chaiyya Chaiyya',
+                artist: 'Sukhwinder, Sapna Awasthi',
+                image: 'image-7',
+                total_duration: '06:30',
+                music_count: '7 / 10',
+            },
+            {
+                name: 'audio-8',
+                title: 'Mehndi Laga Ke',
+                artist: 'Udit Narayan, Lata',
+                image: 'image-8',
+                total_duration: '04:40',
+                music_count: '8 / 10',
+            },
+            {
+                name: 'audio-9',
+                title: 'Meri Mehbooba',
+                artist: 'Kumar Sanu, Alka Yagnnik',
+                image: 'image-9',
+                total_duration: '05:25',
+                music_count: '9 / 10',
+            },
+            {
+                name: 'audio-10',
+                title: 'Jaadu Teri Nazar',
+                artist: 'Lata, Vinod, Udit Narayan',
+                image: 'image-10',
+                total_duration: '02:37',
+                music_count: '10 / 10',
             },
         ]
 
@@ -307,6 +373,7 @@
         
         //changing the music data
         const loadSong = (songs) => {
+            music_count.textContent = songs.music_count;
             title.textContent = songs.title;
             artist.textContent = songs.artist;
             music.src = `songs/${songs.name}.mp3`;
@@ -324,7 +391,7 @@
             progress.style.width = 0;
             isPlaying = false;
              if(songIndex == 0){
-                songIndex = 2;
+                songIndex = 9;
                 loadSong(songs[songIndex]);
              }else{
                  songIndex--;
@@ -338,7 +405,7 @@
             img.classList.remove('anime');
             progress.style.width = 0;
             isPlaying = false;                   
-            if(songIndex == 2){
+            if(songIndex == 9){
                 songIndex = 0;
                 loadSong(songs[songIndex]);
             }else{
